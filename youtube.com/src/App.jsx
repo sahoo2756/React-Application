@@ -19,8 +19,8 @@ function App() {
       if(query === '') {
         throw new Error("Query Is null At API Calling Place")
       }
-      const apiKey = "AIzaSyC7tye0fnfiFMa31SCrMJJksp_8zFbd8HI";
-      let dataUrl = `https://www.googleapis.com/youtube/v3/search?q=${query}&key=${apiKey}`;
+      const apiKey = "AIzaSyBiRRoliElqnYKitt8bL3ME9-uHedM8l28";
+      let dataUrl = `https://www.googleapis.com/youtube/v3/search?q=${query}&maxResults=50&key=${apiKey}`;
       const response = await fetch(dataUrl);
       let data = await response.json();
       console.log(data);
@@ -62,7 +62,7 @@ function App() {
               let url = `https://www.youtube.com/embed/${videoId}`;
               return (
                 <iframe
-                  className="border px-2 py-3 rounded-md w-[47%] h-[250px]"
+                  className="border px-2 py-3 rounded-md w-[30%] h-[180px]"
                   allowFullScreen
                   key={Math.random()}
                   src={url}
