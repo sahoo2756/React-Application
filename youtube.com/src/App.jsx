@@ -1,50 +1,42 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import FetchData from "./FetchData";
+
+
 
 function App() {
   const inputRef = useRef();
   const [videos, setVideos] = useState([]);
 
-  const handleFormData =  () => {
-    let text = inputRef.current.value;
-    // console.log(data)
-    if(text === ""){
-      alert("Query Is Null, Please Put Prompt into Input Feild")
+  const handleFormData = () => {
+    let query = inputRef.current.value;
+
+    if (query === "") {
+      alert("Query Is Null, Please Put Prompt into Input Feild");
     } else {
-      fetchData(text)
+      FetchData({query , setVideos});
     }
+
   };
 
-  const fetchData = async (query) => {
-    try {
-      if(query === '') {
-        throw new Error("Query Is null At API Calling Place")
-      }
-      const apiKey = "AIzaSyBiRRoliElqnYKitt8bL3ME9-uHedM8l28";
-      let dataUrl = `https://www.googleapis.com/youtube/v3/search?q=${query}&maxResults=50&key=${apiKey}`;
-      const response = await fetch(dataUrl);
-      let data = await response.json();
-      console.log(data);
-      setVideos(data);
-    } catch (error) {
-      alert("Query Is Null")
-      console.log("Error ", error);
-    }
-  };
+  useEffect(()=>{
+    console.log("videos => " , videos)
+  } , [videos])
 
+ 
   return (
     <>
-      <div className="w-screen h-[300px] border flex justify-center items-center">
+      <div className="w-screen h-fit py-10 border-b-2 flex justify-center items-center">
         <form
           action=""
           onSubmit={(e) => {
             e.preventDefault();
             handleFormData();
           }}
-          className="w-full flex justify-center "
+          className="w-full flex justify-center px-1"
         >
           <input
-          autoFocus
-            className="outline-none border-none rounded-sm bg-gray-600 px-2 py-1 w-[50%]"
+            autoFocus
+            className="outline-none border-none rounded-sm bg-gray-600 px-2 py-1  sm:w-[50%] w-[100%]"
             type="text"
             ref={inputRef}
             placeholder="Enter Movie Name"
@@ -55,26 +47,28 @@ function App() {
         </form>
       </div>
 
-      <div className="flex flex-wrap justify-between gap-y-5  p-2">
-        {videos.items
-          ? videos.items.map((index) => {
+      <div className="flex flex-col sm:flex-row w-full flex-wrap justify-center items-center gap-y-5 sm:gap-x-5  p-2">
+        {videos
+          ? videos.map((index) => {
               let videoId = index.id.videoId;
               let url = `https://www.youtube.com/embed/${videoId}`;
               return (
                 <iframe
-                  className="border px-2 py-3 rounded-md w-[30%] h-[180px]"
+                  className="border px-2 py-3 rounded-md w-full sm:w-[30%] h-[380px]"
                   allowFullScreen
-                  key={Math.random()}
+                  key={index}
+                  onClick={() => showVideoInFullScreen(index)}
                   src={url}
                 ></iframe>
               );
             })
           : ""}
       </div>
-  {/* 
-        <button onClick={fetchData} className="border p-2">
-          fetch data
-        </button> */}
+      
+      <div>
+        {/* <iframe src="#"></iframe> */}
+      </div>
+
     </>
   );
 }
